@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Grades Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Header ───────────────────────────────────────────────────────── -->
+  <header>
+    <div class="header-content">
+      <div>
+        <h1>🎓 Student Grades Tracker</h1>
+        <p class="subtitle">Deployed on AWS Elastic Beanstalk</p>
+      </div>
+      <div class="aws-badge">⚡ AWS EB</div>
+    </div>
+  </header>
+
+  <!-- ── Stats Bar ─────────────────────────────────────────────────────── -->
+  <section class="stats-bar" id="statsBar">
+    <div class="stat-card">
+      <span class="stat-value" id="statTotal">—</span>
+      <span class="stat-label">Students</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="statAvg">—</span>
+      <span class="stat-label">Class Average</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="statHigh">—</span>
+      <span class="stat-label">Highest Score</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="statLow">—</span>
+      <span class="stat-label">Lowest Score</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="statGrades">—</span>
+      <span class="stat-label">Total Grades</span>
+    </div>
+  </section>
+
+  <!-- ── Main Content ───────────────────────────────────────────────────── -->
+  <main class="container">
+
+    <!-- Add Student Form -->
+    <section class="card add-student-card">
+      <h2>➕ Add New Student</h2>
+      <form id="addStudentForm" class="inline-form">
+        <input
+          type="text"
+          id="studentNameInput"
+          placeholder="Enter student name..."
+          maxlength="60"
+          required
+        />
+        <button type="submit" class="btn btn-primary">Add Student</button>
+      </form>
+      <p class="form-hint">Student is added with no grades. You can add grades from their card below.</p>
+    </section>
+
+    <!-- Students Grid -->
+    <section>
+      <div class="section-header">
+        <h2>📋 All Students</h2>
+        <span class="student-count" id="studentCount">Loading...</span>
+      </div>
+      <div class="students-grid" id="studentsGrid">
+        <div class="loading-state">Loading students...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Add Grade Modal ───────────────────────────────────────────────── -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>📝 Add Grade</h3>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <p class="modal-student-name" id="modalStudentName"></p>
+      <form id="addGradeForm">
+        <input type="hidden" id="modalStudentId" />
+        <div class="form-group">
+          <label for="subjectInput">Subject</label>
+          <input
+            type="text"
+            id="subjectInput"
+            placeholder="e.g. Mathematics, Physics, English..."
+            maxlength="50"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="scoreInput">Score (0 – 100)</label>
+          <input
+            type="number"
+            id="scoreInput"
+            placeholder="85"
+            min="0"
+            max="100"
+            step="0.1"
+            required
+          />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Grade</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
