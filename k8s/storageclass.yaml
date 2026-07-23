@@ -1,0 +1,16 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-gp3
+provisioner: ebs.csi.aws.com
+# Create the EBS volume only AFTER the scheduler picks a node, so the
+# volume lands in the same Availability Zone as the pod. With the default
+# (Immediate) the pod can hang in ContainerCreating forever.
+volumeBindingMode: WaitForFirstConsumer
+# Deleting the PVC does NOT destroy the underlying EBS volume.
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+parameters:
+  type: gp3
+  encrypted: "true"
+  fsType: ext4

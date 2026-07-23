@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grades-app
+  namespace: grades
+  labels:
+    app: grades-app
+spec:
+  # ReadWriteOnce: a second pod on another node cannot attach the same volume.
+  replicas: 1
+  # Recreate, not RollingUpdate: the new pod cannot attach the volume until
+  # the old pod has released it.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: grades-app
+  template:
+    metadata:
+      labels:
+        app: grades-app
+    spec:
+      securityContext:
+        # A freshly formatted ext4 volume mounts as root:root. The container
+        # runs as uid 1000 (node), so without this it cannot write.
+        fsGroup: 1000
+      containers:
+        - name: grades-app
+          # Replace <ACCOUNT_ID> and the tag before applying.
+          image: 424683028908.dkr.ecr.us-east-1.amazonaws.com/student-grades-tracker:eks-v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: DATA_DIR
+              value: /data
+            - name: PORT
+              value: "8080"
+          volumeMounts:
+            - name: grades-storage
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: grades-storage
+          persistentVolumeClaim:
+            claimName: grades-data

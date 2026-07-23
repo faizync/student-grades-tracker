@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grades-data
+  namespace: grades
+spec:
+  # EBS is a block device: read-write by pods on ONE node only.
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs-gp3
+  resources:
+    requests:
+      storage: 4Gi
