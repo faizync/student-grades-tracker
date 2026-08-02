@@ -27,7 +27,7 @@ spec:
       containers:
         - name: grades-app
           # Replace <ACCOUNT_ID> and the tag before applying.
-          image: 424683028908.dkr.ecr.ap-south-1.amazonaws.com/student-grades-tracker:eks-v1
+          image: 424683028908.dkr.ecr.us-east-1.amazonaws.com/student-grades-tracker:eks-v1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
